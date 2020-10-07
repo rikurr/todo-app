@@ -10,6 +10,9 @@ docker-compose up
 ## Hasuraコンソール
 yarn hasura console --project hasura
 
+
+## テスト
+yarn jest --watch
 ## gql-gen生成
 yarn gql-gen -w
 
