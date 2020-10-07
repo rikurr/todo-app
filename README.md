@@ -4,11 +4,14 @@
 ## ローカル
 yarn dev
 
-## Hasura
+## Hasura起動
 docker-compose up
 
 ## Hasuraコンソール
 yarn hasura console --project hasura
+
+## gql-gen生成
+yarn gql-gen -w
 
 ### Stack
 - Apollo GraphQL
