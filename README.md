@@ -1,20 +1,20 @@
-## Next.js Hasura Typescript環境構築
+## Next.js Hasura TypeScript環境構築
 
 
-## ローカル
-yarn dev
+## フロントエンドのローカル環境
+yarn web dev
 
-## Hasura起動
-docker-compose up
+## ローカルのHasura起動
+yarn hasura start
 
 ## Hasuraコンソール
-yarn hasura console --project hasura
+yarn hasura console 
 
 
-## テスト
-yarn jest --watch
-## gql-gen生成
-yarn gql-gen -w
+## フロントエンドテスト
+yarn web test
+## フロントエンドcodegen生成
+yarn web codegen
 
 ### Stack
 - Apollo GraphQL
