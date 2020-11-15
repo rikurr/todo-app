@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "codegen": "gql-gen -w",
+    "codegen": "gql-gen -w -r dotenv/config",
     "test": "jest --watch"
   },
   "dependencies": {
