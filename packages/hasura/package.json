@@ -7,7 +7,7 @@
   "scripts": {
     "start": "docker-compose up",
     "down": "docker-compose down",
-    "console": "hasura console --project hasura",
+    "console": "hasura console",
     "metadata": "hasura metadata",
     "migrate": "hasura migrate"
   }
