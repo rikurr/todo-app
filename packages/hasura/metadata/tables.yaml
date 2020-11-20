@@ -1,3 +1,8 @@
 - table:
     schema: public
     name: todos
+  configuration:
+    custom_root_fields: {}
+    custom_column_names:
+      is_complete: isComplete
+      created_at: createdAt

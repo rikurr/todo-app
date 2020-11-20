@@ -1,15 +1,15 @@
 import React from 'react'
 import styles from './index.module.css'
-import { useAddTodoMutation } from '@/generated/graphql'
+import { useAddtodoMutation } from '@/generated/graphql'
 
 export const AddTodo: React.FC = () => {
-  const [title, settitle] = React.useState('')
+  const [title, setTitle] = React.useState('')
   const [disabled, setDisabled] = React.useState(false)
-  const [mutation] = useAddTodoMutation()
+  const [addTodoMutation] = useAddtodoMutation()
 
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      settitle(event.target.value)
+      setTitle(event.target.value)
     },
     [],
   )
@@ -21,7 +21,7 @@ export const AddTodo: React.FC = () => {
         return
       }
       setDisabled(true)
-      const { data } = await mutation({
+      const { data } = await addTodoMutation({
         variables: {
           title: title,
         },
@@ -29,13 +29,13 @@ export const AddTodo: React.FC = () => {
 
       if (data) {
         console.log(data)
-        settitle('')
+        setTitle('')
         setDisabled(false)
       } else {
         console.log("Can't add todo")
       }
     },
-    [mutation, title],
+    [addTodoMutation, title],
   )
   return (
     <form onSubmit={handleSubmit}>

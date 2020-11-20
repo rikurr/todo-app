@@ -1,0 +1,28 @@
+.app {
+  max-width: 760px;
+  margin: 80px auto;
+  padding: 0 20px;
+}
+
+.input {
+  padding: 8px 12px;
+  font-size: 16px;
+  outline: none;
+  margin-right: 8px;
+}
+
+.button {
+  background: #074fe5;
+  border: none;
+  color: #fff;
+  outline: none;
+  padding: 12px 12px;
+  border-radius: 2px;
+}
+
+.lists {
+  margin-top: 50px;
+}
+
+.item {
+}

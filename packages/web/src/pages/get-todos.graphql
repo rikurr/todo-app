@@ -1,8 +1,8 @@
-query getTodos {
+query GetTodos {
   todos {
     id
+    isComplete
     title
-    is_complete
-    created_at
+    createdAt
   }
 }
