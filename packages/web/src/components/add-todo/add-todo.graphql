@@ -1,8 +1,0 @@
-mutation Addtodo($title: String!) {
-  insert_todos(objects: { title: $title }) {
-    returning {
-      id
-      title
-    }
-  }
-}

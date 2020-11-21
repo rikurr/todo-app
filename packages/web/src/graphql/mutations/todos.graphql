@@ -1,0 +1,17 @@
+mutation AddTodo($title: String!) {
+  insert_todos(objects: { title: $title }) {
+    returning {
+      id
+      title
+    }
+  }
+}
+
+mutation DeleteTodo($id: Int!) {
+  delete_todos(where: { id: { _eq: $id } }) {
+    returning {
+      id
+      title
+    }
+  }
+}
