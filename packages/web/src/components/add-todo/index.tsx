@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './index.module.css'
-import { useAddtodoMutation } from '@/generated/graphql'
+import { useAddTodoMutation } from '@/generated/graphql'
 
 export const AddTodo: React.FC = () => {
   const [title, setTitle] = React.useState('')
   const [disabled, setDisabled] = React.useState(false)
-  const [addTodoMutation] = useAddtodoMutation()
+  const [addTodoMutation] = useAddTodoMutation()
 
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

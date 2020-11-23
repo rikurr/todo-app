@@ -1,9 +1,9 @@
 query GetTodos {
-  todos {
+  todos(order_by: { id: asc }) {
     id
     isComplete
     title
     createdAt
+    plan
   }
 }
-

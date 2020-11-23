@@ -1,41 +1,62 @@
 import { NextPage } from 'next'
 import Error from 'next/error'
-import React, { useCallback, useState } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import {
   useGetTodosQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
+  useCompleteTodoMutation,
+  useInCompleteTodoMutation,
 } from '../generated/graphql'
 import styles from './index.module.css'
 
 type Todo = {
-  onClick: (action: 'addTodo' | 'deleteTodo' | 'done', todoId: number) => any
+  onClick: (
+    action: 'delete' | 'complete' | 'inComplete',
+    todoId: number,
+  ) => void
 }
+type Plan = '今日' | '今週' | '今月' | '来月' | '再来月'
 
 const Index: NextPage = () => {
   const { data, loading, error, refetch } = useGetTodosQuery()
   const [title, setTitle] = useState('')
+  const [plan, setPlan] = useState<Plan>('今日')
   const [disabled, setDisabled] = useState(false)
   const [addTodoMutation] = useAddTodoMutation()
   const [deleteTodoMutation] = useDeleteTodoMutation()
+  const [completeTodoMutation] = useCompleteTodoMutation()
+  const [inCompleteTodoMutation] = useInCompleteTodoMutation()
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setTitle(event.target.value)
-    },
-    [],
-  )
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value)
+  }, [])
+
+  const handleSelect = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.value === '今日') {
+      setPlan(event.target.value)
+    } else if (event.target.value === '今週') {
+      setPlan(event.target.value)
+    } else if (event.target.value === '今月') {
+      setPlan(event.target.value)
+    } else if (event.target.value === '来月') {
+      setPlan(event.target.value)
+    } else if (event.target.value === '再来月') {
+      setPlan(event.target.value)
+    }
+  }, [])
 
   const handleAddTodoSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      if (title.length < 3) {
+      if (title.length < 1) {
         return
       }
       setDisabled(true)
       const { data } = await addTodoMutation({
         variables: {
           title: title,
+          plan: plan,
         },
       })
 
@@ -48,7 +69,7 @@ const Index: NextPage = () => {
         console.log("Can't add todo")
       }
     },
-    [addTodoMutation, title, refetch],
+    [addTodoMutation, title, refetch, plan],
   )
 
   const handleDeleteTodo = useCallback(
@@ -67,14 +88,53 @@ const Index: NextPage = () => {
     [deleteTodoMutation, refetch],
   )
 
+  const handleCompleteTodo = useCallback(
+    async (id: number) => {
+      const { data } = await completeTodoMutation({
+        variables: {
+          id: id,
+        },
+      })
+
+      if (data) {
+        console.log(data)
+        refetch()
+      }
+    },
+    [completeTodoMutation, refetch],
+  )
+
+  const handleInCompleteTodo = useCallback(
+    async (id: number) => {
+      const { data } = await inCompleteTodoMutation({
+        variables: {
+          id: id,
+        },
+      })
+
+      if (data) {
+        console.log(data)
+        refetch()
+      }
+    },
+    [inCompleteTodoMutation, refetch],
+  )
+
   const handleClickTodo = useCallback<Todo['onClick']>(
     (action, todoId) => {
       switch (action) {
-        case 'deleteTodo':
+        case 'delete':
           handleDeleteTodo(todoId)
+          break
+        case 'complete':
+          handleCompleteTodo(todoId)
+          break
+        case 'inComplete':
+          handleInCompleteTodo(todoId)
+          break
       }
     },
-    [handleDeleteTodo],
+    [handleDeleteTodo, handleCompleteTodo, handleInCompleteTodo],
   )
 
   if (loading) {
@@ -100,18 +160,30 @@ const Index: NextPage = () => {
           value={title}
           onChange={handleChange}
         />
+        <select onChange={handleSelect}>
+          <option value="今日">今日</option>
+          <option value="今週">今週</option>
+          <option value="今月">今月</option>
+          <option value="来月">来月</option>
+          <option value="再来月">再来月</option>
+        </select>
+        <p>{plan}</p>
         <button className={styles.button} type="submit" disabled={disabled}>
           Add
         </button>
       </form>
       <ul className={styles.lists}>
         {data.todos.map((item) => (
-          <li
-            className={styles.item}
-            key={item.id}
-            onClick={() => handleClickTodo('deleteTodo', item.id)}
-          >
-            {item.title}
+          <li className={styles.item} key={item.id}>
+            <p onClick={() => handleClickTodo('delete', item.id)}>
+              {item.title}
+            </p>
+            {item.isComplete ? (
+              <p onClick={() => handleClickTodo('inComplete', item.id)}>完了</p>
+            ) : (
+              <p onClick={() => handleClickTodo('complete', item.id)}>未完了</p>
+            )}
+            <p>{item.plan}</p>
           </li>
         ))}
       </ul>

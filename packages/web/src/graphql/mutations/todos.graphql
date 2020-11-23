@@ -1,8 +1,9 @@
-mutation AddTodo($title: String!) {
-  insert_todos(objects: { title: $title }) {
+mutation AddTodo($title: String!, $plan: String!) {
+  insert_todos(objects: { title: $title, plan: $plan }) {
     returning {
       id
       title
+      plan
     }
   }
 }
@@ -13,5 +14,21 @@ mutation DeleteTodo($id: Int!) {
       id
       title
     }
+  }
+}
+
+mutation CompleteTodo($id: Int!) {
+  update_todos_by_pk(pk_columns: { id: $id }, _set: { isComplete: true }) {
+    id
+    title
+    isComplete
+  }
+}
+
+mutation InCompleteTodo($id: Int!) {
+  update_todos_by_pk(pk_columns: { id: $id }, _set: { isComplete: false }) {
+    id
+    title
+    isComplete
   }
 }
