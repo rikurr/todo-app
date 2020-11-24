@@ -1,9 +1,16 @@
 query GetTodos {
   todos(order_by: { id: asc }) {
     id
-    isComplete
+    isCompleted
     title
     createdAt
     plan
+  }
+}
+
+query GetCompletedTodo {
+  todos(order_by: { id: asc }, where: { isCompleted: { _eq: true } }) {
+    id
+    title
   }
 }

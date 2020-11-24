@@ -4,5 +4,5 @@
   configuration:
     custom_root_fields: {}
     custom_column_names:
-      is_complete: isComplete
+      is_completed: isCompleted
       created_at: createdAt

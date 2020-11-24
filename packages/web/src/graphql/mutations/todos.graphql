@@ -17,18 +17,18 @@ mutation DeleteTodo($id: Int!) {
   }
 }
 
-mutation CompleteTodo($id: Int!) {
-  update_todos_by_pk(pk_columns: { id: $id }, _set: { isComplete: true }) {
+mutation isCompletedTodo($id: Int!) {
+  update_todos_by_pk(pk_columns: { id: $id }, _set: { isCompleted: true }) {
     id
     title
-    isComplete
+    isCompleted
   }
 }
 
-mutation InCompleteTodo($id: Int!) {
-  update_todos_by_pk(pk_columns: { id: $id }, _set: { isComplete: false }) {
+mutation isIncompletedTodo($id: Int!) {
+  update_todos_by_pk(pk_columns: { id: $id }, _set: { isCompleted: false }) {
     id
     title
-    isComplete
+    isCompleted
   }
 }

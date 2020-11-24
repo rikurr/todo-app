@@ -5,14 +5,14 @@ import {
   useGetTodosQuery,
   useAddTodoMutation,
   useDeleteTodoMutation,
-  useCompleteTodoMutation,
-  useInCompleteTodoMutation,
+  useIsCompletedTodoMutation,
+  useIsIncompletedTodoMutation,
 } from '../generated/graphql'
 import styles from './index.module.css'
 
 type Todo = {
   onClick: (
-    action: 'delete' | 'complete' | 'inComplete',
+    action: 'delete' | 'isCompleted' | 'isIncompleted',
     todoId: number,
   ) => void
 }
@@ -25,8 +25,8 @@ const Index: NextPage = () => {
   const [disabled, setDisabled] = useState(false)
   const [addTodoMutation] = useAddTodoMutation()
   const [deleteTodoMutation] = useDeleteTodoMutation()
-  const [completeTodoMutation] = useCompleteTodoMutation()
-  const [inCompleteTodoMutation] = useInCompleteTodoMutation()
+  const [isCompletedTodoMutation] = useIsCompletedTodoMutation()
+  const [isIncompletedTodoMutation] = useIsIncompletedTodoMutation()
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value)
@@ -88,9 +88,13 @@ const Index: NextPage = () => {
     [deleteTodoMutation, refetch],
   )
 
-  const handleCompleteTodo = useCallback(
+  const handleFilterCompleted = useCallback(() => {
+    console.log('hello')
+  }, [])
+
+  const handleIsCompleteTodo = useCallback(
     async (id: number) => {
-      const { data } = await completeTodoMutation({
+      const { data } = await isCompletedTodoMutation({
         variables: {
           id: id,
         },
@@ -101,12 +105,12 @@ const Index: NextPage = () => {
         refetch()
       }
     },
-    [completeTodoMutation, refetch],
+    [isCompletedTodoMutation, refetch],
   )
 
-  const handleInCompleteTodo = useCallback(
+  const handleIsIncompleteTodo = useCallback(
     async (id: number) => {
-      const { data } = await inCompleteTodoMutation({
+      const { data } = await isIncompletedTodoMutation({
         variables: {
           id: id,
         },
@@ -117,7 +121,7 @@ const Index: NextPage = () => {
         refetch()
       }
     },
-    [inCompleteTodoMutation, refetch],
+    [isIncompletedTodoMutation, refetch],
   )
 
   const handleClickTodo = useCallback<Todo['onClick']>(
@@ -126,15 +130,15 @@ const Index: NextPage = () => {
         case 'delete':
           handleDeleteTodo(todoId)
           break
-        case 'complete':
-          handleCompleteTodo(todoId)
+        case 'isCompleted':
+          handleIsCompleteTodo(todoId)
           break
-        case 'inComplete':
-          handleInCompleteTodo(todoId)
+        case 'isIncompleted':
+          handleIsIncompleteTodo(todoId)
           break
       }
     },
-    [handleDeleteTodo, handleCompleteTodo, handleInCompleteTodo],
+    [handleDeleteTodo, handleIsCompleteTodo, handleIsIncompleteTodo],
   )
 
   if (loading) {
@@ -172,16 +176,25 @@ const Index: NextPage = () => {
           Add
         </button>
       </form>
+      <div>
+        <p>全て</p>
+        <p>完了のみ</p>
+        <p>アクティブのみ</p>
+      </div>
       <ul className={styles.lists}>
         {data.todos.map((item) => (
           <li className={styles.item} key={item.id}>
             <p onClick={() => handleClickTodo('delete', item.id)}>
               {item.title}
             </p>
-            {item.isComplete ? (
-              <p onClick={() => handleClickTodo('inComplete', item.id)}>完了</p>
+            {item.isCompleted ? (
+              <p onClick={() => handleClickTodo('isIncompleted', item.id)}>
+                完了
+              </p>
             ) : (
-              <p onClick={() => handleClickTodo('complete', item.id)}>未完了</p>
+              <p onClick={() => handleClickTodo('isCompleted', item.id)}>
+                未完了
+              </p>
             )}
             <p>{item.plan}</p>
           </li>
